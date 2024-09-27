@@ -3,12 +3,11 @@
 import { io } from 'socket.io-client';
 import Solver from './solver.js';
 
-const SECRET = '29526e07-6d5a-4ee5-8bc8-e7df715467bb'; // Das Secret des Bot
+const SECRET = ''; //'29526e07-6d5a-4ee5-8bc8-e7df715467bb'; // Das Secret des Bot
 const GAMESERVER = 'https://games.uhno.de'; // URL zum Gameserver
 
 if (SECRET === '') {
     console.error('NO SECRET.');
-    return;
 }
 
 const socket = io(GAMESERVER, {
@@ -21,7 +20,6 @@ socket.on('connect', () => {
     socket.emit('authenticate', SECRET, (success) => {
         if (success) {
             console.log('Connected successfully.');
-            solver = new Solver();
             return;
         }
 
@@ -47,6 +45,7 @@ socket.on('data', (data, callback) => {
 });
 
 const init = (data) => {
+    solver = new Solver();
     // TODO: irgendwas initialisieren?
 };
 const result = (data) => {
