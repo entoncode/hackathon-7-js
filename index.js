@@ -3,7 +3,7 @@
 import { io } from 'socket.io-client';
 import Solver from './solver.js';
 
-const SECRET = ''; //'29526e07-6d5a-4ee5-8bc8-e7df715467bb'; // Das Secret des Bot
+const SECRET = process.argv[2] !== undefined ? process.argv[2] : 'a929442e-7b49-4482-b631-6a2b0ada4753'; // Das Secret des Bot
 const GAMESERVER = 'https://games.uhno.de'; // URL zum Gameserver
 
 if (SECRET === '') {
@@ -14,7 +14,6 @@ const socket = io(GAMESERVER, {
     transports: ['websocket']
 });
 
-let solver;
 socket.on('connect', () => {
     console.log('Connecting...');
     socket.emit('authenticate', SECRET, (success) => {
@@ -44,15 +43,30 @@ socket.on('data', (data, callback) => {
     }
 });
 
+let solver;
+let self;
+
 const init = (data) => {
     solver = new Solver();
-    // TODO: irgendwas initialisieren?
+    self = data.self;
+
+    console.log(`Match initialized: ${data.id}`);
 };
 const result = (data) => {
-    // TODO: irgendwas aufräumen?
+    const wrongLetters = solver.guesses.length - [...new Set(Object.values(solver.word))].length;
+    for (const player of data.players) {
+        if (player.id === self) {
+            console.log(`Match complete, word was '${data.word}'. Score: ${player.score}, Wrong Letters: ${wrongLetters}`);
+        }
+    }
+
+    solver.addWord(data.word);
 };
 const round = (data, callback) => {
-    // TODO: die bestmögliche Antwort liefern.
-    // Buchstabe A-Z?
-    callback('???');
+    solver.save(data.word);
+
+    const move = solver.next();
+    console.log(`Making move '${move}'`);
+
+    callback(move);
 };

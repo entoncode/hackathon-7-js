@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js"
+    "start": "npx nodemon index.js",
+    "peter": "npx nodemon index.js 1cbf1568-4cec-4850-9d4d-06ccb25ee680"
   },
   "keywords": [],
   "author": "Enton, Bünting Syntaxschmiede",
