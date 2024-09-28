@@ -3,7 +3,7 @@
 import { io } from 'socket.io-client';
 import Solver from './solver.js';
 
-const SECRET = process.argv[2] !== undefined ? process.argv[2] : 'a929442e-7b49-4482-b631-6a2b0ada4753'; // Das Secret des Bot
+const SECRET = process.argv[2] !== undefined ? process.argv[2] : '32cf92c3-2397-4519-915e-e43609695533'; // Das Secret des Bot
 const GAMESERVER = 'https://games.uhno.de'; // URL zum Gameserver
 
 if (SECRET === '') {
@@ -53,10 +53,9 @@ const init = (data) => {
     console.log(`Match initialized: ${data.id}`);
 };
 const result = (data) => {
-    const wrongLetters = solver.guesses.length - [...new Set(Object.values(solver.word))].length;
     for (const player of data.players) {
         if (player.id === self) {
-            console.log(`Match complete, word was '${data.word}'. Score: ${player.score}, Wrong Letters: ${wrongLetters}`);
+            console.log(`Match complete, word was '${data.word}'. Score: ${player.score}`);
         }
     }
 
